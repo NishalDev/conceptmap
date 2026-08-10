@@ -1,0 +1,12 @@
+{
+  "name": "conceptmap",
+  "owner": { "name": "Nishal" },
+  "plugins": [
+    {
+      "name": "conceptmap",
+      "description": "Map engineering concepts onto any codebase and study them one at a time.",
+      "source": "./",
+      "category": "learning"
+    }
+  ]
+}
