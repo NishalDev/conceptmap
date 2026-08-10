@@ -8,7 +8,7 @@ Choose one concept for the user to study now, then teach it.
 
 Everything needed is in this prompt and the loaded skill. Do not look for SKILL.md, the plugin directory, or any plugin file on disk.
 
-Registry: use `./concepts-registry.json`, or `CONCEPTMAP_REGISTRY` if set.
+Registry: use `./concepts-registry.json`, or `NERD_REGISTRY` if set.
 Read and edit it with Read and Edit. Do not search anywhere else for it..
 
 Selection, in priority order: `score: 3` with `evidence` in this repo, then
@@ -27,4 +27,4 @@ Teach in this order:
    failure mode the current implementation would not survive.
 
 Change nothing in the registry. Close by telling the user to run
-`/conceptmap:solid <id>` when they want to be tested.
+`/nerd:solid <id>` when they want to be tested.

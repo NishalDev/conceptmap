@@ -10,7 +10,7 @@ concept actually appears.
 Everything needed is in this prompt and the loaded skill. Do not look for
 SKILL.md, the plugin directory, or any plugin file on disk.
 
-Registry: use `./concepts-registry.json`, or `CONCEPTMAP_REGISTRY` if set. Read
+Registry: use `./concepts-registry.json`, or `NERD_REGISTRY` if set. Read
 and edit it with Read and Edit. Do not search anywhere else for it. If neither
 location has one, say so and stop - do not create or copy a registry in this
 turn.

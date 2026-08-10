@@ -1,5 +1,5 @@
 ---
-name: conceptmap
+name: nerd
 description: Use when the user wants to learn the engineering concepts behind a codebase, asks what concepts a project uses or is missing, wants to study a concept against real code, or mentions their concept registry. Triggers on "what concepts does this use", "map this repo", "what should I learn next here", "mark this solid", "what's missing here".
 ---
 
@@ -13,7 +13,7 @@ one. This skill maps those concepts onto real code and manages the registry.
 Look in exactly two places, in order, and stop at the first hit:
 
 1. `./concepts-registry.json` in the current working directory
-2. the path in `CONCEPTMAP_REGISTRY`, if that variable is set
+2. the path in `NERD_REGISTRY`, if that variable is set
 
 Do not search the filesystem. Do not look in home directories, Desktop,
 Downloads, or the plugin cache. If neither location has a registry, stop and ask
@@ -58,7 +58,7 @@ listed here.
 ## Writing to the registry
 
 Edit only the concept objects that changed. Never rewrite or reformat the whole
-file, never reorder concepts, never touch `meta`. Only `/conceptmap:solid`
+file, never reorder concepts, never touch `meta`. Only `/nerd:solid`
 changes a `score`; scanning never does.
 
 ## Scanning a repo
@@ -111,4 +111,4 @@ worthless to the person relying on it in an interview.
 
 The inverse of a scan: given the shape of this system, name the concepts a
 codebase like it would normally rely on but this one does not. Report, never
-write. Details in the `/conceptmap:gaps` command.
+write. Details in the `/nerd:gaps` command.
