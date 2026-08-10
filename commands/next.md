@@ -4,8 +4,12 @@ argument-hint: "[optional: category id]"
 allowed-tools: Read, Grep
 ---
 
-Choose one concept for the user to study now, then teach it. Use the
-`conceptmap:conceptmap` skill.
+Choose one concept for the user to study now, then teach it.
+
+Everything needed is in this prompt and the loaded skill. Do not look for SKILL.md, the plugin directory, or any plugin file on disk.
+
+Registry: use `./concepts-registry.json`, or `CONCEPTMAP_REGISTRY` if set.
+Read and edit it with Read and Edit. Do not search anywhere else for it..
 
 Selection, in priority order: `score: 3` with `evidence` in this repo, then
 `score: 2` with `evidence`, then `score: 3` without. If `$ARGUMENTS` names a

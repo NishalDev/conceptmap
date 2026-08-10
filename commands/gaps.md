@@ -4,8 +4,12 @@ argument-hint: "[optional: category id or subdirectory]"
 allowed-tools: Read, Glob, Grep
 ---
 
-Run a scan in reverse: report what is missing, not what is present. Use the
-`conceptmap:conceptmap` skill.
+Run a scan in reverse: report what is missing, not what is present. 
+
+Everything needed is in this prompt and the loaded skill. Do not look for SKILL.md, the plugin directory, or any plugin file on disk.
+
+Registry: use `./concepts-registry.json`, or `CONCEPTMAP_REGISTRY` if set.
+Read and edit it with Read and Edit. Do not search anywhere else for it..
 
 First understand the shape of the system - what it does, its data model, and
 where it touches money, auth, external services, user input and background work.

@@ -6,7 +6,11 @@ disable-model-invocation: true
 ---
 
 The user wants to mark `$ARGUMENTS` as known. Do not take their word for it.
-Use the `conceptmap:conceptmap` skill.
+
+Everything needed is in this prompt and the loaded skill. Do not look for SKILL.md, the plugin directory, or any plugin file on disk.
+
+Registry: use `./concepts-registry.json`, or `CONCEPTMAP_REGISTRY` if set.
+Read and edit it with Read and Edit. Do not search anywhere else for it..
 
 If no id was given, ask which one. Handle one concept per run.
 
