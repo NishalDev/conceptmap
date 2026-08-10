@@ -1,0 +1,7 @@
+{
+  "name": "conceptmap",
+  "version": "0.1.0",
+  "description": "A learning loop for codebases: find the concepts a project is built on, study each one against the real code, and track what you actually know.",
+  "author": { "name": "Nishal" },
+  "license": "MIT"
+}
