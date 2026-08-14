@@ -90,6 +90,8 @@ Every row is written back into the registry with a note. `db-008` came with:
 | `/nerd:next [category]` | Picks what you should learn next. One thing. He is not giving you a menu |
 | `/nerd:solid <id>` | The oral exam. Pass and it's marked. Don't and it isn't |
 | `/nerd:gaps [category\|path]` | Tells you what a codebase like yours usually has and yours doesn't |
+| `/nerd:catch [category]` | End of session: reads only what you committed since the last scan, proposes evidence, writes nothing until you say yes |
+| `/nerd:report [path]` | Renders the whole registry as one offline HTML page - scores, which repos cover what, what's ready to study |
 
 `/nerd:gaps` is the uncomfortable one. A scan lists what you already touched - your comfort zone, rendered as a table. Gaps lists what you skipped and sorts it by whether it's going to bite.
 
@@ -109,15 +111,16 @@ It fills up with your file paths, notes on how your system works and your own wo
 ```
 # .gitignore
 concepts-registry.json
+nerd-report.html
 ```
 
-Keeping one registry across several repos, or working in a repo you don't control? Put it anywhere and point him at it:
+Better still, keep it out of every repo. `NERD_REGISTRY` points him at one file, from anywhere - one registry across all your codebases, nothing to gitignore, nothing to leak in a repo you don't control:
 
 ```bash
 export NERD_REGISTRY="$HOME/dev/concepts-registry.json"
 ```
 
-He checks `./concepts-registry.json`, then that variable and nowhere else. He does not go rummaging through your home directory.
+Evidence is tagged with the project it came from, so the repos stay separable inside that one file. He checks `./concepts-registry.json`, then that variable and nowhere else. He does not go rummaging through your home directory.
 
 ## Keeping runs cheap
 
@@ -129,7 +132,8 @@ Scan one category at a time - `/nerd:scan db` weighs 35 concepts, not 258 and co
 {
   "meta": {
     "scoreRubric": { "1": "solid", "2": "shaky", "3": "unknown" },
-    "categories": [{ "id": "db", "name": "Databases & Data Modeling" }]
+    "categories": [{ "id": "db", "name": "Databases & Data Modeling" }],
+    "projects": [{ "id": "billing-api", "root": "/home/you/dev/billing-api" }]
   },
   "concepts": [
     {
@@ -139,7 +143,10 @@ Scan one category at a time - `/nerd:scan db` weighs 35 concepts, not 258 and co
       "score": 3,
       "target": 1,
       "notes": "",
-      "evidence": [{ "file": "src/modules/auth/auth.service.ts", "note": "SELECT ... FOR UPDATE on refresh" }],
+      "evidence": [
+        { "project": "billing-api", "file": "src/modules/auth/auth.service.ts", "note": "SELECT ... FOR UPDATE on refresh" },
+        { "project": "ledger", "file": "internal/store/tx.go", "note": "same lock, different language" }
+      ],
       "history": [],
       "lastReviewed": null
     }
@@ -148,6 +155,8 @@ Scan one category at a time - `/nerd:scan db` weighs 35 concepts, not 258 and co
 ```
 
 Scores run **1 = solid, 2 = shaky, 3 = unknown**. Lower is better, which annoys people and he does not care. `notes` holds your explanation in your own words - not a definition copied from anywhere, because a definition you copied proves nothing.
+
+One registry can cover as many repos as you like. `project` is the repo's directory name, lowercased, and `meta.projects` remembers where each one lives. Which repos use a concept is read off its evidence - there's no second list to fall out of sync. Scores and notes stay global: you either know row locking or you don't, and that doesn't change when you `cd`.
 
 The starter ships 66 concepts across 12 categories. Rename them, delete them, add your own. It's meant to become yours.
 

@@ -48,8 +48,22 @@ Lower is better. Never assume the reverse, and never infer the scale from
 anything but this file.
 
 Each concept has `id`, `name`, `category`, `categoryId`, `detail`, `score`,
-`target`, `notes` (the user's own words), `evidence` (`[{file, note}]`),
+`target`, `notes` (the user's own words), `evidence` (`[{project, file, note}]`),
 `resources`, `history` (`[{date, score}]`), `lastReviewed`.
+
+One registry can cover several codebases. `project` is the id of the repo the
+file lives in: the basename of `git rev-parse --show-toplevel`, lowercased.
+`meta.projects` is the list of ids seen so far, as `[{id, root, lastScanCommit}]`
+where `root` is that toplevel path and `lastScanCommit` is the mark `/nerd:catch`
+diffs from: the HEAD sha as of the last time that project was caught up. It is
+absent until the first `/nerd:catch`, and `/nerd:scan` does not set it.
+
+Which projects use a concept is derived from its `evidence` entries. There is no
+`projects` key on a concept - never add one, or the two will disagree.
+
+Scores and notes are global to the concept: knowing something is not per-repo.
+Evidence is per-project - the same concept can be demonstrated in three repos
+and each place earns its own entry.
 
 Registries written before this plugin may lack `evidence` - add the key on
 first write. Preserve every other key exactly as found, including ones not
@@ -58,29 +72,54 @@ listed here.
 ## Writing to the registry
 
 Edit only the concept objects that changed. Never rewrite or reformat the whole
-file, never reorder concepts, never touch `meta`. Only `/nerd:solid`
-changes a `score`; scanning never does.
+file, never reorder concepts. Only `/nerd:solid` changes a `score`; scanning
+never does.
+
+`meta` is the one exception, and only for `meta.projects`: the first time
+evidence is written for a project id that is not already listed, append
+`{id, root}`. `lastScanCommit` on an existing entry may be moved forward, by
+`/nerd:catch` only. Nothing else in an entry is rewritten and no entry is ever
+removed - a project that has moved or gone away still owns the evidence written
+under it.
+
+Evidence is keyed on `(project, file)`. Before appending an entry, look for one
+with the same project and file already in the array and replace it in place;
+only append if there is none. Rescanning a repo must not grow its own evidence.
+
+### Backfilling old entries
+
+An evidence entry with no `project` key predates scoping. When one is on a
+concept you are writing to, check whether its `file` exists in the current repo:
+
+- present - it is this project's, add `"project": "<current id>"` to it
+- absent - leave it exactly as it is, unknown project and all
+
+Never guess a project for a file you cannot see.
 
 ## Scanning a repo
 
 Budget: roughly 25 file reads. Spend them deliberately rather than exhaustively.
 
-1. Slice the registry for the concepts in scope, as above. State how many are in
+1. Get the project id and root: `git rev-parse --show-toplevel`, basename,
+   lowercased.
+2. Slice the registry for the concepts in scope, as above. State how many are in
    scope before starting.
-2. Map the repo structure with Glob - entry points, routes, schema and
+3. Map the repo structure with Glob - entry points, routes, schema and
    migrations, config, jobs and workers, middleware.
-3. Use Grep for concept signals before reading anything: library names, decorator
+4. Use Grep for concept signals before reading anything: library names, decorator
    and function names, SQL keywords, config keys. Issue these searches in
    parallel in a single message, not one at a time.
-4. Read only the files the greps point at, densest first.
+5. Read only the files the greps point at, densest first.
 
 A concept counts only if the code genuinely demonstrates it. An import, a
 dependency in `package.json`, or a passing mention in a comment is not
 evidence. When in doubt, leave it unmatched - a scan that over-claims is worse
 than one that under-claims, because the user studies from it.
 
-Write matches into `evidence` as `{file, note}` with a path relative to the repo
-root and one line on how it is used.
+Write matches into `evidence` as `{project, file, note}` - the current project
+id, a path relative to the repo root, one line on how it is used - replacing any
+entry already there for the same `(project, file)`. Add the project to
+`meta.projects` if this is its first evidence.
 
 Report as a compact table - id, name, file - grouped by category, then a single
 line counting what went unmatched. Do not print the registry back, do not list
