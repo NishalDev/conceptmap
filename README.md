@@ -1,10 +1,20 @@
-# nerd
+<p align="center">
+  <img src="assets/logo.png" alt="the nerd" width="250">
+</p>
 
-*He actually read the docs. He won't let you say you know it until you've said it out loud.*
 
+<h1 align="center">Nerd</h1>
+
+<p align="center"><em>He actually read the docs. He won't let you say you know it until you've said it out loud.</em></p>
+
+<p align="center">
 You know him. Sat two desks down. Answers a question about connection pooling with three follow-up questions of his own. Asks "okay, but what happens when the pool is exhausted?" and then waits, while you find out live that you don't know.
+</p>
 
-nerd puts him inside your codebase.
+<p align="center">
+  <em>Nerd puts himself inside your codebase.</em>
+</p>
+
 
 ## The problem
 
